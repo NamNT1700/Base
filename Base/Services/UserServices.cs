@@ -4,13 +4,13 @@ using Base.Datas.DTO;
 using Base.Datas.IRepository;
 using Base.Datas.Repository;
 using Base.Datas.Respones;
+using Base.Log;
 using Base.Models;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc; 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 namespace Base.Services
 {
     public class UserServices: IUserService
@@ -19,12 +19,16 @@ namespace Base.Services
         private IMapper _mapper;
         public Context _context;
         private IUserRepository _userRepository;
+        private IloggerManager _logger;
 
-        public UserServices(IMapper mapper, IUserRepository userRepository)
+        public UserServices(IMapper mapper, IUserRepository userRepository, IloggerManager logger)
         {
             //_repository = repository;
             _mapper = mapper;
             _userRepository = userRepository;
+            _logger = logger;
+
+
         }
         public Response Register(RegisterUserDTO reUser)
         {
@@ -36,6 +40,7 @@ namespace Base.Services
                 string description = _userRepository.CheckUserInfo(reUser.username, reUser.email);
                 if(description!=null)
                 {
+                    _logger.LogError(description);
                     respones.status = "Error";
                     respones.data = description;
                     return respones;
@@ -50,14 +55,7 @@ namespace Base.Services
             }
             catch (Exception ex)
             {
-                if (ex.InnerException != null)
-                {
-                    respones.status = "Error";
-                    respones.data = ex.InnerException.Message;
-                    return respones;
-                }
-                respones.status = "Error";
-                respones.data = ex.Message;
+                _logger.LogError($"{ex.Message}");
                 return respones;
             }
 

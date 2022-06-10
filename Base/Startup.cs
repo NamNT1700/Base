@@ -1,5 +1,6 @@
 using Base.Datas.IRepository;
 using Base.Datas.Repository;
+using Base.Log;
 using Base.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +35,7 @@ namespace Base
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<IUserService, UserServices>();
+            services.AddSingleton<IloggerManager,LoggerManager>();
             services.AddDbContext<Context>
                 (o => o.UseMySql(Configuration["mysqlconnection:connectionString"],
                 MySqlServerVersion.LatestSupportedServerVersion, b => b.MigrationsAssembly("Base")));
