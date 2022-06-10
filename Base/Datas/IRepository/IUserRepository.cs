@@ -13,6 +13,9 @@ namespace Base.Datas.IRepository
         string CheckUserInfo(string username, string email);
         public void AddNew(User entity);
         public void Save();
-        public IEnumerable<User> FindAllData();
+        public List<User> FindAllData();
+        public User FindByUsername(string username);
+        public User CheckPassword(string passwword);
+        public string CheckUserLogin(string username,string password);
     }
 }

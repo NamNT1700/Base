@@ -36,9 +36,15 @@ namespace Base.Controllers
             return Ok(res);
         }
         [HttpGet("GetAllUsers")]
-        public IActionResult GetAllUsers()
+        public IActionResult GetAllUsers(int page)
         {
-            Response res = _userService.GetAllUsers();
+            Response res = _userService.GetAllUsers(page);
+            return Ok(res);
+        }
+        [HttpPost("Login")]
+        public IActionResult Login(LoginDTO user)
+        {
+            Response res = _userService.Login(user);
             return Ok(res);
         }
     }

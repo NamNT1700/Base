@@ -18,7 +18,7 @@ namespace Base.Common
         {
             _configuration = configuration;
         }
-        public string GenerateAccessToken(User user)
+        public  string GenerateAccessToken(User user)
         {
             var userClaim = new List<Claim>
             {
@@ -34,11 +34,11 @@ namespace Base.Common
             var tokenDescription = new SecurityTokenDescriptor
             {
                 Subject = claimsIdentity,
-                Expires = DateTime.UtcNow.AddMinutes(999),
+                Expires = DateTime.UtcNow.AddMinutes(10),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretkeyBytes), SecurityAlgorithms.HmacSha256Signature)
             };
             var accessToken = jwtTokenHandle.CreateToken(tokenDescription);
-            return Convert.ToString(accessToken);
+            return jwtTokenHandle.WriteToken(accessToken);
         }
     }
 }

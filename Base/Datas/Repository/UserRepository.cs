@@ -21,12 +21,12 @@ namespace Base.Datas.Repository
         {
             Create(entity);
         }
-        public IEnumerable<User> FindAllData()
+        public List<User> FindAllData()
         {
-            //List<User> datas = new List<User>();
-            //datas = FindAll().ToList();
+            List<User> datas = new List<User>();
+            datas = FindAll().ToList();
             //datas.Sort();
-            return FindAll().OrderBy(u => u.lastname).ToList();
+            return datas;
         }
         public User FindById(string id)
         {
@@ -49,6 +49,21 @@ namespace Base.Datas.Repository
             existUser = FindByEmail(email);
             if (existUser != null)
                 return "email already used";
+            return null;
+        }
+        public User CheckPassword(string encPasswword)
+        {
+            return FindByCondition(u => u.password.Equals(encPasswword)).FirstOrDefault();
+        }
+
+        public string CheckUserLogin(string username, string password)
+        {
+            User isExist = FindByUsername(username);
+            if (isExist == null)
+                return "Wrong username";
+            isExist = CheckPassword(password);
+            if (isExist == null)
+                return "Wrong password";
             return null;
         }
         public void Save()

@@ -6,7 +6,8 @@ using Base.Datas.Repository;
 using Base.Datas.Respones;
 using Base.Log;
 using Base.Models;
-using Microsoft.AspNetCore.Mvc; 
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +21,15 @@ namespace Base.Services
         public Context _context;
         private IUserRepository _userRepository;
         private IloggerManager _logger;
+        private IConfiguration _configuration;
 
-        public UserServices(IMapper mapper, IUserRepository userRepository, IloggerManager logger)
+        public UserServices(IMapper mapper, IUserRepository userRepository, IloggerManager logger, IConfiguration configuration)
         {
             //_repository = repository;
             _mapper = mapper;
             _userRepository = userRepository;
             _logger = logger;
-
+            _configuration = configuration;
 
         }
         public Response Register(RegisterUserDTO reUser)
@@ -60,14 +62,45 @@ namespace Base.Services
             }
 
         }
-        public Response GetAllUsers()
+        public Response GetAllUsers(int page)
         {
-            IEnumerable <User> users = _userRepository.FindAllData();
-            IEnumerable<UserDTO> listUser = _mapper.Map<IEnumerable<UserDTO>>(users);
+            List<User> allUsers = _userRepository.FindAllData();
+            IEnumerable<UserDTO> listUser = _mapper.Map<IEnumerable<UserDTO>>(allUsers);
             Response response = new Response();
+            
+            List<User> users = new List<User>();
+            int index = (page - 1) * 10;
+            if(index> allUsers.Count())
+            {
+                response.status = "Success";
+                response.data = "no user yet";
+                return response;
+            }
+            if (index + 10 < allUsers.Count())
+                users = allUsers.GetRange(index, 10);
+            else users = allUsers.GetRange(index, allUsers.Count - index);
             response.status = "Success";
-            response.data = listUser;
+            response.data = users;
             return response;
+        }
+
+        public Response Login(LoginDTO user)
+        {
+            Response respones = new Response();
+            string encodePass =EncodingPassword.EncodingUTF8(user.password);
+            string description = _userRepository.CheckUserLogin(user.username, encodePass);
+            if (description == null)
+            {
+                User loginUser = _userRepository.FindByUsername(user.username);
+                TokenGenarate accessToken = new TokenGenarate(_configuration);
+                string token =  accessToken.GenerateAccessToken(loginUser);
+                respones.status = "Success";
+                respones.data = token;
+                return respones;
+            }
+            respones.status = "Error";
+            respones.data = description;
+            return respones;
         }
     }
 }

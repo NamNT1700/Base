@@ -10,6 +10,7 @@ namespace Base.Services
     public interface IUserService
     {
         public Response Register(RegisterUserDTO reUser);
-        public Response GetAllUsers();
+        public Response GetAllUsers(int page);
+        public Response Login(LoginDTO user);
     }
 }
