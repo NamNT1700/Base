@@ -1,14 +1,15 @@
-﻿using Base.Datas.IRepository;
+﻿using Repository.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Base.Datas.Repository
+namespace Repository.Repository
 {
-    public class RepositoryWrapper : IRepositoryWrapper
+    public class RepositoryWrapper: IRepositoryWrapper
     {
-         Context _context;
+        Context _context;
         IUserRepository userRepository;
         public RepositoryWrapper(Context context)
         {

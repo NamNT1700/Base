@@ -25,7 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Log\Internal_log\" />
+    <ProjectReference Include="..\Data\Repository.csproj" />
+    <ProjectReference Include="..\Loggger\Loggger.csproj" />
+    <ProjectReference Include="..\Model\Model.csproj" />
+    <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 
 </Project>

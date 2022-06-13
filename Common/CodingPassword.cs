@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Base.Common
+namespace Common
 {
-    public static class EncodingPassword
+    public class CodingPassword
     {
         public static string EncodingUTF8(string password)
         {

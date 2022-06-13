@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Base.Datas.DTO;
-using Base.Datas.IRepository;
-using Base.Datas.Respones;
-using Base.Log;
-using Base.Services;
+using Loggger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Model;
+using Model.DTO;
+using Repository.IRepository;
+using Services.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,15 +18,10 @@ namespace Base.Controllers
     public class UserController : ControllerBase
     {
         //private IRepositoryWrapper _repository;
-        private IMapper _mapper;
-        private IUserRepository _userRepository;
         private IUserService _userService;
-        private IloggerManager _logger;
 
-        public UserController(IMapper mapper, IUserRepository userRepository, IUserService userService, IloggerManager logger)
+        public UserController(IUserService userService)
         {
-            _mapper = mapper;
-            _userRepository = userRepository;
             _userService = userService;
         }
         [HttpPost("Register")]

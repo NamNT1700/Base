@@ -1,56 +1,55 @@
 ﻿using AutoMapper;
-using Base.Common;
-using Base.Datas.DTO;
-using Base.Datas.IRepository;
-using Base.Datas.Repository;
-using Base.Datas.Respones;
-using Base.Log;
-using Base.Models;
-using Microsoft.AspNetCore.Mvc;
+using Common;
+using Loggger;
 using Microsoft.Extensions.Configuration;
+using Model;
+using Model.DTO;
+using Repository;
+using Repository.IRepository;
+using Services.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-namespace Base.Services
+
+namespace Services.Services
 {
-    public class UserServices: IUserService
+    public class UserService: IUserService
     {
-       // private IRepositoryWrapper _repository;
+        // private IRepositoryWrapper _repository;
         private IMapper _mapper;
-        public Context _context;
-        private IUserRepository _userRepository;
+        private Context _context;
+        private IRepositoryWrapper _repositoryWrapper;
         private IloggerManager _logger;
         private IConfiguration _configuration;
 
-        public UserServices(IMapper mapper, IUserRepository userRepository, IloggerManager logger, IConfiguration configuration)
+        public UserService(IMapper mapper, IloggerManager logger, IConfiguration configuration,
+            IRepositoryWrapper repositoryWrapper)
         {
             //_repository = repository;
             _mapper = mapper;
-            _userRepository = userRepository;
             _logger = logger;
             _configuration = configuration;
+            _repositoryWrapper = repositoryWrapper;
 
         }
         public Response Register(RegisterUserDTO reUser)
         {
             Response respones = new Response();
-            HttpRequest<User> httpUser = new HttpRequest<User>(_context);
             try
             {
-                
-                string description = _userRepository.CheckUserInfo(reUser.username, reUser.email);
-                if(description!=null)
+
+                string description = _repositoryWrapper.User.CheckUserInfo(reUser.username, reUser.email);
+                if (description != null)
                 {
                     _logger.LogError(description);
                     respones.status = "Error";
                     respones.data = description;
                     return respones;
                 }
-                reUser.password = EncodingPassword.EncodingUTF8(reUser.password);
+                reUser.password = CodingPassword.EncodingUTF8(reUser.password);
                 User newUser = _mapper.Map<User>(reUser);
-                _userRepository.AddNew(newUser);
-                _userRepository.Save();
+                _repositoryWrapper.User.AddNew(newUser);
+                _repositoryWrapper.Save();
                 respones.status = "Success";
                 respones.data = newUser;
                 return respones;
@@ -64,13 +63,13 @@ namespace Base.Services
         }
         public Response GetAllUsers(int page)
         {
-            List<User> allUsers = _userRepository.FindAllData();
+            List<User> allUsers = _repositoryWrapper.User.FindAllData();
             IEnumerable<UserDTO> listUser = _mapper.Map<IEnumerable<UserDTO>>(allUsers);
             Response response = new Response();
-            
+
             List<User> users = new List<User>();
             int index = (page - 1) * 10;
-            if(index> allUsers.Count())
+            if (index > allUsers.Count())
             {
                 response.status = "Success";
                 response.data = "no user yet";
@@ -87,13 +86,13 @@ namespace Base.Services
         public Response Login(LoginDTO user)
         {
             Response respones = new Response();
-            string encodePass =EncodingPassword.EncodingUTF8(user.password);
-            string description = _userRepository.CheckUserLogin(user.username, encodePass);
+            string encodePass = CodingPassword.EncodingUTF8(user.password);
+            string description = _repositoryWrapper.User.CheckUserLogin(user.username, encodePass);
             if (description == null)
             {
-                User loginUser = _userRepository.FindByUsername(user.username);
+                User loginUser = _repositoryWrapper.User.FindByUsername(user.username);
                 TokenGenarate accessToken = new TokenGenarate(_configuration);
-                string token =  accessToken.GenerateAccessToken(loginUser);
+                string token = accessToken.GenerateAccessToken(loginUser);
                 respones.status = "Success";
                 respones.data = token;
                 return respones;

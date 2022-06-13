@@ -1,7 +1,4 @@
-using Base.Datas.IRepository;
-using Base.Datas.Repository;
-using Base.Log;
-using Base.Services;
+using Loggger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +11,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Repository;
+using Repository.IRepository;
+using Repository.Repository;
+using Services.IServices;
+using Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,9 +37,8 @@ namespace Base
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
-            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
-            services.AddScoped<IUserService, UserServices>();
+            services.AddScoped<IUserService, UserService>();
             services.AddSingleton<IloggerManager,LoggerManager>();
             services.AddDbContext<Context>
                 (o => o.UseMySql(Configuration["mysqlconnection:connectionString"],

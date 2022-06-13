@@ -1,11 +1,12 @@
-﻿using Base.Datas.DTO;
-using Base.Datas.Respones;
+﻿using Model;
+using Model.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Base.Services
+namespace Services.IServices
 {
     public interface IUserService
     {

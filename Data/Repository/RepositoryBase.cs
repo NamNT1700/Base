@@ -1,13 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Repository.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Base.Datas.Repository
+namespace Repository.Repository
 {
-    public class RepositoryBase<T> where T: class
+    public class RepositoryBase<T>: IRepositoryBase<T> where T : class
     {
         public Context context { get; set; }
         public RepositoryBase(Context context)

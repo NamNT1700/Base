@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using Base.Datas.DTO;
-using Base.Models;
+using Model;
+using Model.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Base.Services
+namespace Base
 {
-    public class MappingProfile: Profile
+    public class MappingProfile:Profile
     {
         public MappingProfile()
         {

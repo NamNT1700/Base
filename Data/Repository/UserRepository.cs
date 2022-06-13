@@ -1,20 +1,18 @@
-﻿using Base.Common;
-using Base.Datas.IRepository;
-using Base.Models;
+﻿using Model;
+using Repository.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Base.Datas.Repository
+namespace Repository.Repository
 {
-    public class UserRepository :RepositoryBase<User>, IUserRepository //HttpRequest<User>, IUserRepository
+    public class UserRepository: RepositoryBase<User>,IUserRepository
     {
-        Context _context;
         public UserRepository(Context context)
             : base(context)
         {
-            _context = context;
         }
 
         public void AddNew(User entity)
@@ -40,7 +38,7 @@ namespace Base.Datas.Repository
         {
             return FindByCondition(u => u.username.Equals(username)).FirstOrDefault();
         }
-        public string CheckUserInfo(string username,string email)
+        public string CheckUserInfo(string username, string email)
         {
             User existUser = new User();
             existUser = FindByUsername(username);
@@ -65,10 +63,6 @@ namespace Base.Datas.Repository
             if (isExist == null)
                 return "Wrong password";
             return null;
-        }
-        public void Save()
-        {
-            _context.SaveChanges();
         }
     }
 }

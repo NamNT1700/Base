@@ -1,6 +1,6 @@
-﻿using Base.Models;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Base.Common
+namespace Common
 {
     public class TokenGenarate
     {
@@ -18,7 +18,7 @@ namespace Base.Common
         {
             _configuration = configuration;
         }
-        public  string GenerateAccessToken(User user)
+        public string GenerateAccessToken(User user)
         {
             var userClaim = new List<Claim>
             {
