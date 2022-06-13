@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using Model.DTO;
+using Model.DTO.USERDTO;
 using Repository.IRepository;
 using Services.IServices;
 using System;
@@ -30,7 +31,7 @@ namespace Base.Controllers
             Response res = _userService.Register(user);
             return Ok(res);
         }
-        [HttpGet("GetAllUsers")]
+        [HttpGet("Users")]
         public IActionResult GetAllUsers(int page)
         {
             Response res = _userService.GetAllUsers(page);
@@ -40,6 +41,18 @@ namespace Base.Controllers
         public IActionResult Login(LoginDTO user)
         {
             Response res = _userService.Login(user);
+            return Ok(res);
+        }
+        [HttpDelete("User")]
+        public IActionResult Delete(DeleteUserDTO deleteUserDTO)
+        {
+            Response res = _userService.DeleteUser(deleteUserDTO);
+            return Ok(res);
+        }
+        [HttpPut("User")]
+        public IActionResult UpdateStatus(IdUserUpdate idUserUpdate)
+        {
+            Response res = _userService.ChangeStatusUser(idUserUpdate);
             return Ok(res);
         }
     }

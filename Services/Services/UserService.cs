@@ -4,6 +4,7 @@ using Loggger;
 using Microsoft.Extensions.Configuration;
 using Model;
 using Model.DTO;
+using Model.DTO.USERDTO;
 using Repository;
 using Repository.IRepository;
 using Services.IServices;
@@ -99,6 +100,58 @@ namespace Services.Services
             }
             respones.status = "Error";
             respones.data = description;
+            return respones;
+        }
+
+        public Response DeleteUser(DeleteUserDTO deleteUserDTO)
+        {
+            Response respones = new Response();
+            foreach(string id in deleteUserDTO.ids)
+            {
+                User existUser = _repositoryWrapper.User.FindById(id);
+                if (existUser != null)
+                {
+                    _repositoryWrapper.User.Delete(existUser);
+                    _repositoryWrapper.Save();
+                }
+            }
+            respones.status = "Success";
+            respones.data = "Delete successfull";
+            return respones;
+        }
+
+        public Response FindUserById(string id)
+        {
+            Response respones = new Response();
+            User existUser = _repositoryWrapper.User.FindById(id);
+            if (existUser == null)
+            {
+                respones.status = "Error";
+                respones.data = "User not exist";
+                return respones;
+            }
+            respones.status = "Success";
+            respones.data = existUser;
+            return respones;
+        }
+
+        public Response ChangeStatusUser(IdUserUpdate idUserUpdate)
+        {
+            Response respones = new Response();
+            User existUser = _repositoryWrapper.User.FindById(idUserUpdate.id);
+            if (existUser == null)
+            {
+                respones.status = "Error";
+                respones.data = "User not exist";
+                return respones;
+            }
+            idUserUpdate.updateStatusUserDTO.isActive = existUser.isActive;
+            idUserUpdate.updateStatusUserDTO.isActive = !idUserUpdate.updateStatusUserDTO.isActive;
+            _mapper.Map(idUserUpdate.updateStatusUserDTO, existUser);
+            _repositoryWrapper.User.Update(existUser);
+            _repositoryWrapper.Save();
+            respones.status = "Success";
+            respones.data = $"Now status of user is {idUserUpdate.updateStatusUserDTO.isActive}";
             return respones;
         }
     }

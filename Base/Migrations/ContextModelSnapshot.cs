@@ -19,9 +19,8 @@ namespace Base.Migrations
 
             modelBuilder.Entity("Model.User", b =>
                 {
-                    b.Property<Guid>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                    b.Property<string>("id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("bith")
                         .HasColumnType("datetime(6)");
@@ -31,6 +30,9 @@ namespace Base.Migrations
 
                     b.Property<string>("firstname")
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("lastname")
                         .HasColumnType("longtext");

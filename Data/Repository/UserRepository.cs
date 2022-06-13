@@ -19,6 +19,14 @@ namespace Repository.Repository
         {
             Create(entity);
         }
+        public void DeleteUser(User entity)
+        {
+            Delete(entity);
+        }
+        public void UpdateUser(User entity)
+        {
+            Update(entity);
+        }
         public List<User> FindAllData()
         {
             List<User> datas = new List<User>();

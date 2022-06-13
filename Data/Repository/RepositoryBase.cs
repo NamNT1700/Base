@@ -23,7 +23,7 @@ namespace Repository.Repository
 
         public void Delete(T entity)
         {
-            throw new NotImplementedException();
+            this.context.Set<T>().Remove(entity);
         }
 
         public IQueryable<T> FindAll()
@@ -38,7 +38,7 @@ namespace Repository.Repository
 
         public void Update(T entity)
         {
-            throw new NotImplementedException();
+            this.context.Set<T>().Update(entity);
         }
     }
 }
