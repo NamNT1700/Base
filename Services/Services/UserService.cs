@@ -141,6 +141,13 @@ namespace Services.Services
             foreach (string id in idUserUpdate.ids)
             {
                 User existUser = _repositoryWrapper.User.FindById(id);
+                
+                if (existUser.isActive == "A")
+                {
+                    respones.status = "Error";
+                    respones.data = $"User {existUser.id} is already Active";
+                    return respones;
+                }
                 existUser.isActive = "I";
                 //idUserUpdate.updateStatusUserDTO.isActive = "I";
                 //_mapper.Map(idUserUpdate.updateStatusUserDTO, existUser);
@@ -157,6 +164,12 @@ namespace Services.Services
             foreach (string id in idUserUpdate.ids)
             {
                 User existUser = _repositoryWrapper.User.FindById(id);
+                if (existUser.isActive == "I")
+                {
+                    respones.status = "Error";
+                    respones.data = $"User {existUser.id} is already Inactive";
+                    return respones;
+                }    
                 existUser.isActive = "A";
                 //idUserUpdate.updateStatusUserDTO.isActive = "A";
                 //_mapper.Map(idUserUpdate.updateStatusUserDTO, existUser);
