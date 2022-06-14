@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Model.DTO.USERDTO
 {
-    public class IdUserUpdate
+    public class IdUserUpdateStatus
     {
-        public string id { get; set; }
-        public UpdateStatusUserDTO updateStatusUserDTO { get; set; }
+        public List<string> ids { get; set; }
+        //public UpdateStatusUserDTO updateStatusUserDTO { get; set; }
     }
     public class UpdateStatusUserDTO
     {
-        public bool isActive { get; set; }
+        public string isActive { get; set; }
     }
 }

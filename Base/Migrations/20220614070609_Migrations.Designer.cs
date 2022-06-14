@@ -9,7 +9,7 @@ using Repository;
 namespace Base.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20220613081144_Migrations")]
+    [Migration("20220614070609_Migrations")]
     partial class Migrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,8 +33,8 @@ namespace Base.Migrations
                     b.Property<string>("firstname")
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("isActive")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<string>("isActive")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("lastname")
                         .HasColumnType("longtext");

@@ -15,6 +15,6 @@ namespace Model.DTO.USERDTO
         public string email { get; set; }
         
         public DateTime bith { get; set; }
-        public bool isActive { get; set; }
+        public string isActive { get; set; }
     }
 }

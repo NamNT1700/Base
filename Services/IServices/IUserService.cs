@@ -16,6 +16,9 @@ namespace Services.IServices
         public Response Login(LoginDTO user);
         public Response DeleteUser(DeleteUserDTO deleteUserDTO);
         public Response FindUserById(string id);
-        public Response ChangeStatusUser(IdUserUpdate idUserUpdate);
+        public Response ChangeStatusUserToInActive(IdUserUpdateStatus idUserUpdate);
+        public Response FindUserActive();
+        public Response FindUsersInactive();
+        public Response ChangeStatusUserToActive(IdUserUpdateStatus idUserUpdate);
     }
 }

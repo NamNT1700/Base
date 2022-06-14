@@ -19,6 +19,7 @@ namespace Repository.IRepository
         public User FindByUsername(string username);
         public User CheckPassword(string passwword);
         public string CheckUserLogin(string username, string password);
-        //public User FindUserById(Guid id);
+        public List<User> FindUsersActive();
+        public List<User> FindUsersInactive();
     }
 }

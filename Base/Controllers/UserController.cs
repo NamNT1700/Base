@@ -49,10 +49,28 @@ namespace Base.Controllers
             Response res = _userService.DeleteUser(deleteUserDTO);
             return Ok(res);
         }
-        [HttpPut("User")]
-        public IActionResult UpdateStatus(IdUserUpdate idUserUpdate)
+        [HttpPut("ActiveUser")]
+        public IActionResult UpdateStatusToInActive(IdUserUpdateStatus idUserUpdate)
         {
-            Response res = _userService.ChangeStatusUser(idUserUpdate);
+            Response res = _userService.ChangeStatusUserToInActive(idUserUpdate);
+            return Ok(res);
+        }
+        [HttpGet("ActiveUsers")]
+        public IActionResult GetAllActiveUser()
+        {
+            Response res = _userService.FindUserActive();
+            return Ok(res);
+        }
+        [HttpPut("InActiveUsers")]
+        public IActionResult UpdateStatusToActive(IdUserUpdateStatus idUserUpdate)
+        {
+            Response res = _userService.ChangeStatusUserToInActive(idUserUpdate);
+            return Ok(res);
+        }
+        [HttpGet("InActiveUsers")]
+        public IActionResult GetAllInActiveUser()
+        {
+            Response res = _userService.FindUsersInactive();
             return Ok(res);
         }
     }

@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace Services.Services
 {
-    public class UserService: IUserService
+    public class UserService : IUserService
     {
         // private IRepositoryWrapper _repository;
         private IMapper _mapper;
@@ -106,7 +106,7 @@ namespace Services.Services
         public Response DeleteUser(DeleteUserDTO deleteUserDTO)
         {
             Response respones = new Response();
-            foreach(string id in deleteUserDTO.ids)
+            foreach (string id in deleteUserDTO.ids)
             {
                 User existUser = _repositoryWrapper.User.FindById(id);
                 if (existUser != null)
@@ -135,23 +135,68 @@ namespace Services.Services
             return respones;
         }
 
-        public Response ChangeStatusUser(IdUserUpdate idUserUpdate)
+        public Response ChangeStatusUserToInActive(IdUserUpdateStatus idUserUpdate)
         {
             Response respones = new Response();
-            User existUser = _repositoryWrapper.User.FindById(idUserUpdate.id);
-            if (existUser == null)
+            foreach (string id in idUserUpdate.ids)
             {
-                respones.status = "Error";
-                respones.data = "User not exist";
-                return respones;
+                User existUser = _repositoryWrapper.User.FindById(id);
+                existUser.isActive = "I";
+                //idUserUpdate.updateStatusUserDTO.isActive = "I";
+                //_mapper.Map(idUserUpdate.updateStatusUserDTO, existUser);
+                _repositoryWrapper.User.Update(existUser);
             }
-            idUserUpdate.updateStatusUserDTO.isActive = existUser.isActive;
-            idUserUpdate.updateStatusUserDTO.isActive = !idUserUpdate.updateStatusUserDTO.isActive;
-            _mapper.Map(idUserUpdate.updateStatusUserDTO, existUser);
-            _repositoryWrapper.User.Update(existUser);
             _repositoryWrapper.Save();
             respones.status = "Success";
-            respones.data = $"Now status of user is {idUserUpdate.updateStatusUserDTO.isActive}";
+            respones.data = $"Now status of users is Inactive";
+            return respones;
+        }
+        public Response ChangeStatusUserToActive(IdUserUpdateStatus idUserUpdate)
+        {
+            Response respones = new Response();
+            foreach (string id in idUserUpdate.ids)
+            {
+                User existUser = _repositoryWrapper.User.FindById(id);
+                existUser.isActive = "A";
+                //idUserUpdate.updateStatusUserDTO.isActive = "A";
+                //_mapper.Map(idUserUpdate.updateStatusUserDTO, existUser);
+                _repositoryWrapper.User.Update(existUser);
+            }
+            _repositoryWrapper.Save();
+            respones.status = "Success";
+            respones.data = $"Now status of users is Active";
+            return respones;
+        }
+
+        public Response FindUserActive()
+        {
+            Response respones = new Response();
+            List<User> users = new List<User>();
+            users = _repositoryWrapper.User.FindUsersActive();
+            if (users.Count == 0)
+            {
+                respones.status = "Success";
+                respones.data = "No user is Active";
+                return respones;
+            }
+            respones.status = "Success";
+            respones.data = users;
+            return respones;
+        }
+
+        public Response FindUsersInactive()
+        {
+            Response respones = new Response();
+            List<User> users = new List<User>();
+            users = _repositoryWrapper.User.FindUsersInactive();
+            if(users.Count==0)
+            {
+                respones.status = "Success";
+                respones.data = "No user is InActive";
+                return respones;
+            }
+            respones.status = "Success";
+            respones.data = users;
             return respones;
         }
     }

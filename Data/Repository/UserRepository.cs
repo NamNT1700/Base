@@ -31,7 +31,6 @@ namespace Repository.Repository
         {
             List<User> datas = new List<User>();
             datas = FindAll().ToList();
-            //datas.Sort();
             return datas;
         }
         public User FindById(string id)
@@ -71,6 +70,15 @@ namespace Repository.Repository
             if (isExist == null)
                 return "Wrong password";
             return null;
+        }
+
+        public List<User> FindUsersActive()
+        {
+            return FindAll().Where(u => u.isActive.Equals("A")).ToList();
+        }
+        public List<User> FindUsersInactive()
+        {
+            return FindAll().Where(u => u.isActive.Equals("I")).ToList();
         }
     }
 }

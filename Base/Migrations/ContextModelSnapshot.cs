@@ -31,8 +31,8 @@ namespace Base.Migrations
                     b.Property<string>("firstname")
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("isActive")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<string>("isActive")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("lastname")
                         .HasColumnType("longtext");
