@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Loggger;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -50,6 +51,7 @@ namespace Base.Controllers
             return Ok(res);
         }
         [HttpPut("ActiveUser")]
+       // [Authorize(Roles="Admin")]
         public IActionResult UpdateStatusToInActive(IdUserUpdateStatus idUserUpdate)
         {
             Response res = _userService.ChangeStatusUserToInActive(idUserUpdate);

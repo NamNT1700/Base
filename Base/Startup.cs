@@ -72,15 +72,16 @@ namespace Base
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IloggerManager logger)
         {
+           // app.UseMiddleware<RequestLoggingMiddleware>();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Base v1"));
             }
-
+            app.UseMiddleware<LoggingMiddleware>();
             app.UseHttpsRedirection();
 
             app.UseRouting();
