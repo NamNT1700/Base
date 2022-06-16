@@ -32,10 +32,10 @@ namespace Base.Controllers
             Response res = _userService.Register(user);
             return Ok(res);
         }
-        [HttpGet("Users")]
-        public IActionResult GetAllUsers(int page)
+        [HttpPost("Users")]
+        public IActionResult GetAllUsers(BaseRequest<User> baseRequest)
         {
-            Response res = _userService.GetAllUsers(page);
+            Response res = _userService.GetAllUsers(baseRequest);
             return Ok(res);
         }
         [HttpPost("Login")]
@@ -54,26 +54,11 @@ namespace Base.Controllers
        // [Authorize(Roles="Admin")]
         public IActionResult UpdateStatusToInActive(IdUserUpdateStatus idUserUpdate)
         {
-            Response res = _userService.ChangeStatusUserToInActive(idUserUpdate);
+            Response res = _userService.ChangeStatusUser(idUserUpdate);
             return Ok(res);
         }
-        [HttpGet("ActiveUsers")]
-        public IActionResult GetAllActiveUser()
-        {
-            Response res = _userService.FindUserActive();
-            return Ok(res);
-        }
-        [HttpPut("InActiveUsers")]
-        public IActionResult UpdateStatusToActive(IdUserUpdateStatus idUserUpdate)
-        {
-            Response res = _userService.ChangeStatusUserToInActive(idUserUpdate);
-            return Ok(res);
-        }
-        [HttpGet("InActiveUsers")]
-        public IActionResult GetAllInActiveUser()
-        {
-            Response res = _userService.FindUsersInactive();
-            return Ok(res);
-        }
+       
+       
+       
     }
 }

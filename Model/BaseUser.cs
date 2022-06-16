@@ -9,9 +9,9 @@ namespace Model
     public class BaseUser
     {
         // user id
-        public int id { get; set; }
+        public string id { get; set; }
         // user name 
-        public string userName { get; set; }
+        public string username { get; set; }
         // name user
         public string name { get; set; }
         // token 

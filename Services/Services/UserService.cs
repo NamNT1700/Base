@@ -43,16 +43,18 @@ namespace Services.Services
                 if (description != null)
                 {
                     _logger.LogError(description);
-                    respones.status = "Error";
-                    respones.data = description;
+                    respones.status = "400";
+                    respones.success = false;
+                    respones.message=description;
                     return respones;
                 }
                 reUser.password = CodingPassword.EncodingUTF8(reUser.password);
                 User newUser = _mapper.Map<User>(reUser);
                 _repositoryWrapper.User.AddNew(newUser);
                 _repositoryWrapper.Save();
-                respones.status = "Success";
-                respones.data = newUser;
+                respones.status = "200";
+                respones.success = true;
+                respones.item = newUser;
                 return respones;
             }
             catch (Exception ex)
@@ -62,25 +64,27 @@ namespace Services.Services
             }
 
         }
-        public Response GetAllUsers(int page)
+        public Response GetAllUsers(BaseRequest<User> baseRequest)
         {
             List<User> allUsers = _repositoryWrapper.User.FindAllData();
             IEnumerable<UserDTO> listUser = _mapper.Map<IEnumerable<UserDTO>>(allUsers);
             Response response = new Response();
-
+            
             List<User> users = new List<User>();
-            int index = (page - 1) * 10;
-            if (index > allUsers.Count())
+            int firstIndex = (baseRequest.pageNum - 1) * baseRequest.pageSize;
+            if (firstIndex >= allUsers.Count())
             {
-                response.status = "Success";
-                response.data = "no user yet";
+                response.status = "400";
+                response.success = false;
+                response.message="no user yet";
                 return response;
             }
-            if (index + 10 < allUsers.Count())
-                users = allUsers.GetRange(index, 10);
-            else users = allUsers.GetRange(index, allUsers.Count - index);
+            if (firstIndex + baseRequest.pageSize < allUsers.Count())
+                users = allUsers.GetRange(firstIndex, baseRequest.pageSize);
+            else users = allUsers.GetRange(firstIndex, allUsers.Count - firstIndex);
             response.status = "Success";
-            response.data = users;
+            response.success = true;
+            response.item = users;
             return response;
         }
 
@@ -94,12 +98,14 @@ namespace Services.Services
                 User loginUser = _repositoryWrapper.User.FindByUsername(user.username);
                 TokenGenarate accessToken = new TokenGenarate(_configuration);
                 string token = accessToken.GenerateAccessToken(loginUser);
-                respones.status = "Success";
-                respones.data = token;
+                respones.status = "200";
+                respones.success = true;
+                respones.item = token;
                 return respones;
             }
-            respones.status = "Error";
-            respones.data = description;
+            respones.status = "200";
+            respones.success = false;
+            respones.message=description;
             return respones;
         }
 
@@ -115,8 +121,9 @@ namespace Services.Services
                     _repositoryWrapper.Save();
                 }
             }
-            respones.status = "Success";
-            respones.data = "Delete successfull";
+            respones.status = "200";
+            respones.success = true;
+            respones.message="Delete successfull";
             return respones;
         }
 
@@ -126,91 +133,37 @@ namespace Services.Services
             User existUser = _repositoryWrapper.User.FindById(id);
             if (existUser == null)
             {
-                respones.status = "Error";
-                respones.data = "User not exist";
+                respones.status = "400";
+                respones.success = false;
+                respones.message="User not exist";
                 return respones;
             }
-            respones.status = "Success";
-            respones.data = existUser;
+            respones.status = "200";
+            respones.success = true;
+            respones.item = existUser;
             return respones;
         }
 
-        public Response ChangeStatusUserToInActive(IdUserUpdateStatus idUserUpdate)
+        public Response ChangeStatusUser(IdUserUpdateStatus idUserUpdate)
         {
             Response respones = new Response();
-            foreach (string id in idUserUpdate.ids)
-            {
-                User existUser = _repositoryWrapper.User.FindById(id);
-                
+                User existUser = _repositoryWrapper.User.FindById(idUserUpdate.id);
                 if (existUser.isActive == "A")
-                {
-                    respones.status = "Error";
-                    respones.data = $"User {existUser.id} is already Active";
-                    return respones;
-                }
-                existUser.isActive = "I";
-                //idUserUpdate.updateStatusUserDTO.isActive = "I";
-                //_mapper.Map(idUserUpdate.updateStatusUserDTO, existUser);
-                _repositoryWrapper.User.Update(existUser);
-            }
-            _repositoryWrapper.Save();
-            respones.status = "Success";
-            respones.data = $"Now status of users is Inactive";
-            return respones;
-        }
-        public Response ChangeStatusUserToActive(IdUserUpdateStatus idUserUpdate)
-        {
-            Response respones = new Response();
-            foreach (string id in idUserUpdate.ids)
-            {
-                User existUser = _repositoryWrapper.User.FindById(id);
+                     existUser.isActive = "I";
                 if (existUser.isActive == "I")
-                {
-                    respones.status = "Error";
-                    respones.data = $"User {existUser.id} is already Inactive";
-                    return respones;
-                }    
-                existUser.isActive = "A";
-                //idUserUpdate.updateStatusUserDTO.isActive = "A";
-                //_mapper.Map(idUserUpdate.updateStatusUserDTO, existUser);
+                    existUser.isActive = "A";
                 _repositoryWrapper.User.Update(existUser);
-            }
+
             _repositoryWrapper.Save();
-            respones.status = "Success";
-            respones.data = $"Now status of users is Active";
+            respones.status = "200";
+            respones.success = true;
+            respones.message =$"Now status of users is Inactive";
             return respones;
         }
+       
 
-        public Response FindUserActive()
-        {
-            Response respones = new Response();
-            List<User> users = new List<User>();
-            users = _repositoryWrapper.User.FindUsersActive();
-            if (users.Count == 0)
-            {
-                respones.status = "Success";
-                respones.data = "No user is Active";
-                return respones;
-            }
-            respones.status = "Success";
-            respones.data = users;
-            return respones;
-        }
+       
 
-        public Response FindUsersInactive()
-        {
-            Response respones = new Response();
-            List<User> users = new List<User>();
-            users = _repositoryWrapper.User.FindUsersInactive();
-            if(users.Count==0)
-            {
-                respones.status = "Success";
-                respones.data = "No user is InActive";
-                return respones;
-            }
-            respones.status = "Success";
-            respones.data = users;
-            return respones;
-        }
+        
     }
 }

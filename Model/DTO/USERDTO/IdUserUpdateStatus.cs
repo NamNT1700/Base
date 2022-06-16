@@ -8,11 +8,11 @@ namespace Model.DTO.USERDTO
 {
     public class IdUserUpdateStatus
     {
-        public List<string> ids { get; set; }
+        public string id { get; set; }
         //public UpdateStatusUserDTO updateStatusUserDTO { get; set; }
     }
     public class UpdateStatusUserDTO
     {
-        public string isActive { get; set; }
+        public string status { get; set; }
     }
 }

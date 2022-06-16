@@ -19,6 +19,11 @@ namespace Loggger
 
         public async Task Invoke(HttpContext context)
         {
+            string logFilePath = @"C:\Users\Tuan Nam\Desktop\Base\Base\Log\logmiddleware\Log-" + System.DateTime.Today.ToString("MM-dd-yyyy") + "." + "txt";
+            FileInfo logFileInfo = new FileInfo(logFilePath);
+            DirectoryInfo logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
+            if (!logDirInfo.Exists) logDirInfo.Create();
+
             try
             {
                 DateTime startTime = DateTime.Now;//Japan Standard Time
@@ -53,6 +58,7 @@ namespace Loggger
 
                 using (Stream originalBody = context.Response.Body)
                 {
+                   
                     try
                     {
                         // https://stackoverflow.com/questions/43403941/how-to-read-asp-net-core-response-body
@@ -75,6 +81,14 @@ namespace Loggger
                     }
                     catch (Exception streamEx)
                     {
+                        using (FileStream fileStream = new FileStream(logFilePath, FileMode.Append))
+                        {
+                            using (StreamWriter log = new StreamWriter(fileStream))
+                            {
+                                log.WriteLine(data.requestHeaders.ToString());
+                                log.WriteLine(streamEx.ToString());
+                            }
+                        }
                         Console.WriteLine(streamEx.ToString());
                     }
                 }
@@ -85,7 +99,16 @@ namespace Loggger
                 data.executeTime = DateTime.Now.Subtract(startTime).Milliseconds;  //Japan Standard Time
 
                 // Implement dump log
+                /////System.DateTime.Today.ToString("MM-dd-yyyy") +
                 logger.LogInformation(data.ToString());
+               
+                using (FileStream fileStream = new FileStream(logFilePath, FileMode.Append))
+                {
+                    using (StreamWriter log = new StreamWriter(fileStream))
+                    {
+                        log.WriteLine(data.ToString());
+                    }
+                }
             }
             catch (Exception ex)
             {

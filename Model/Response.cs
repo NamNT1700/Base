@@ -9,6 +9,9 @@ namespace Model
     public class Response
     {
         public string status { get; set; }
-        public object data { get; set; }
+        public string message { get; set; }
+        public bool success { get; set; }
+        public object item { get; set; }
+        //public List<object> items { get; set; }
     }
 }
