@@ -66,7 +66,7 @@ namespace Services.Services
         }
         public Response GetAllUsers(BaseRequest<User> baseRequest)
         {
-            List<User> allUsers = _repositoryWrapper.User.FindAllData();
+            List<User> allUsers = _repositoryWrapper.User.FindAllData(baseRequest.keyworks);
             IEnumerable<UserDTO> listUser = _mapper.Map<IEnumerable<UserDTO>>(allUsers);
             Response response = new Response();
             

@@ -15,7 +15,7 @@ namespace Repository.IRepository
         public void AddNew(User entity);
         public void DeleteUser(User entity);
         public void UpdateUser(User entity);
-        public List<User> FindAllData();
+        public List<User> FindAllData(string status);
         public User FindByUsername(string username);
         public User CheckPassword(string passwword);
         public string CheckUserLogin(string username, string password);

@@ -27,10 +27,16 @@ namespace Repository.Repository
         {
             Update(entity);
         }
-        public List<User> FindAllData()
+        public List<User> FindAllData(string status)
         {
             List<User> datas = new List<User>();
-            datas = FindAll().ToList();
+            if (status == "N")
+            {
+                datas = FindAll().ToList();
+                return datas;
+            }    
+
+            datas = FindAll().Where(u => u.isActive.Equals(status)).ToList();
             return datas;
         }
         public User FindById(string id)
