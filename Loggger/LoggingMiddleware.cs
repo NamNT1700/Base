@@ -85,7 +85,6 @@ namespace Loggger
                         {
                             using (StreamWriter log = new StreamWriter(fileStream))
                             {
-                                log.WriteLine(data.requestHeaders.ToString());
                                 log.WriteLine(streamEx.ToString());
                             }
                         }
@@ -106,7 +105,12 @@ namespace Loggger
                 {
                     using (StreamWriter log = new StreamWriter(fileStream))
                     {
-                        log.WriteLine(data.ToString());
+                        //log.WriteLine(data.requestHeaders);
+                        log.WriteLine($"\n");
+                        log.WriteLine(data.requestMethod);
+                        log.WriteLine(data.requestUrl);
+                        log.WriteLine(data.responseBody);
+                        //log.WriteLine(data.responseErrorMessage.ToString());
                     }
                 }
             }
