@@ -32,7 +32,7 @@ namespace Base.Controllers
             Response res = _userService.Register(user);
             return Ok(res);
         }
-        [HttpPost("Users")]
+        [HttpPost("GetAllUsers")]
         public IActionResult GetAllUsers(BaseRequest<User> baseRequest)
         {
             Response res = _userService.GetAllUsers(baseRequest);
@@ -50,7 +50,7 @@ namespace Base.Controllers
             Response res = _userService.DeleteUser(deleteUserDTO);
             return Ok(res);
         }
-        [HttpPut("ActiveUser")]
+        [HttpPut("StatusUser")]
        // [Authorize(Roles="Admin")]
         public IActionResult UpdateStatusToInActive(IdUserUpdateStatus idUserUpdate)
         {
